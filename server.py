@@ -67,7 +67,7 @@ class UploadHandler(tornado.web.RequestHandler):
         style_id = self.get_argument('style_id')
         content = file['body']
         image = (io.BytesIO(content))
-        # print(image)
+        print(image)
         image_path = style_images_path + style_id + '.jpg'
         if os.path.exists(image_path):
             result_image = evaluate(
