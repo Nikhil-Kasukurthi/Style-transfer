@@ -25,21 +25,23 @@ from torchvision import transforms
 import utils
 from net import Net, Vgg16
 
-# model = './21model.th'
-
-# style_images_path = 'images/museum_styles/'
 dataset_df = pd.read_csv('dataset.csv')
+static_file_path = 'static'
 
-# style_model = Net(ngf=128)
-# style_model.load_state_dict(torch.load(model), False)
-# cuda = torch.cuda.is_available()
+model = './21styles.model'
+style_images_path = 'images/museum_styles/'
 
-# if cuda:
-#     style_model.cuda()
-#     content_image = content_image.cuda()
-#     style = style.cuda()
+style_model = Net(ngf=128)
+style_model.load_state_dict(torch.load(model), False)
+cuda = torch.cuda.is_available()
 
-def evaluate(raw_content_image, raw_content_size, style_image, style_size, cuda, output):
+if cuda:
+    style_model.cuda()
+    content_image = content_image.cuda()
+    style = style.cuda()
+
+
+def evaluate(raw_content_image, raw_content_size, style_image, style_size, cuda, output_name):
     content_image = utils.tensor_load_rgbimage(
         raw_content_image, size=raw_content_size, keep_asp=True)
     content_image = content_image.unsqueeze(0)
@@ -54,7 +56,7 @@ def evaluate(raw_content_image, raw_content_size, style_image, style_size, cuda,
 
     output = style_model(content_image)
     transfer_image = utils.tensor_save_bgrimage(
-        output.data[0], output_image, cuda)
+        output.data[0], output_name, cuda)
     return transfer_image
 
 
@@ -65,13 +67,18 @@ class UploadHandler(tornado.web.RequestHandler):
         style_id = self.get_argument('style_id')
         content = file['body']
         image = (io.BytesIO(content))
-        print(image)
+        # print(image)
         image_path = style_images_path + style_id + '.jpg'
         if os.path.exists(image_path):
             result_image = evaluate(
-                image, 512, image_path, 512, cuda, 'output')
+                image, 512, 
+                image_path, 
+                512, cuda, 
+                os.path.join(static_file_path, file['filename']))
+                # 'file.jpg')
             response = {}
-            response['style_image'] = str(numpy.asarray(image))
+            response['style_image'] = '/static/'+file['filename']
+            self.set_header("Content-type",  "image/png")
             self.write(response)
         else:
             self.write({'Response': 'Image not Found'})
@@ -85,17 +92,17 @@ class DatasetHandler(tornado.web.RequestHandler):
         dataset['images'] = []
         # print(dataset_df)
         for index, row in dataset_df.iterrows():
-            item={}
-            item['Title']=row['Title']
-            item['Database ID']=row['Database ID']
-            item['Link']=row['Link']
+            item = {}
+            item['Title'] = row['Title']
+            item['Database ID'] = row['Database ID']
+            item['Link'] = row['Link']
             dataset['images'].append(item)
         self.write(dataset)
-                
+
 app = tornado.web.Application([
     (r'/upload', UploadHandler),
     (r'/dataset', DatasetHandler)
-], debug=True)
+], debug=True, static_path=static_file_path)
 
 app.listen(8001)
 tornado.ioloop.IOLoop.instance().start()
