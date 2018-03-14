@@ -25,7 +25,6 @@ from torchvision import transforms
 import utils
 from net import Net, Vgg16
 
-from option import Options
 
 style_images_path = 'images/museum_styles/'
 dataset_df = pd.read_csv('dataset.csv')
