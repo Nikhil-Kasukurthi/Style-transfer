@@ -28,7 +28,7 @@ from net import Net, Vgg16
 # model = './21model.th'
 
 # style_images_path = 'images/museum_styles/'
-# dataset_df = pd.read_csv('dataset.csv')
+dataset_df = pd.read_csv('dataset.csv')
 
 # style_model = Net(ngf=128)
 # style_model.load_state_dict(torch.load(model), False)
