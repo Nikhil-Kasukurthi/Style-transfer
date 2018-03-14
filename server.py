@@ -25,30 +25,19 @@ from torchvision import transforms
 import utils
 from net import Net, Vgg16
 
+# model = './21model.th'
 
-style_images_path = 'images/museum_styles/'
-dataset_df = pd.read_csv('dataset.csv')
+# style_images_path = 'images/museum_styles/'
+# dataset_df = pd.read_csv('dataset.csv')
 
-style_model = Net(ngf=128)
-style_model.load_state_dict(torch.load(model), False)
-cuda = torch.cuda.is_available()
+# style_model = Net(ngf=128)
+# style_model.load_state_dict(torch.load(model), False)
+# cuda = torch.cuda.is_available()
 
-if cuda:
-    style_model.cuda()
-    content_image = content_image.cuda()
-    style = style.cuda()
-
-
-def check_paths(args):
-    try:
-        if not os.path.exists(args.vgg_model_dir):
-            os.makedirs(args.vgg_model_dir)
-        if not os.path.exists(args.save_model_dir):
-            os.makedirs(args.save_model_dir)
-    except OSError as e:
-        print(e)
-        sys.exit(1)
-
+# if cuda:
+#     style_model.cuda()
+#     content_image = content_image.cuda()
+#     style = style.cuda()
 
 def evaluate(raw_content_image, raw_content_size, style_image, style_size, cuda, output):
     content_image = utils.tensor_load_rgbimage(
