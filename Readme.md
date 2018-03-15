@@ -48,7 +48,7 @@ api.team-iris.me/style-transfer
                ]
           }
  ```
- 
+ ### Upload content image to transfer onto
  ```/upload```
  
  ```
