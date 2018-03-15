@@ -52,8 +52,9 @@ api.team-iris.me/style-transfer
  ```/upload```
  
  ```
- METHOD: GET
- Parameters: None
+ METHOD: POST
+ Parameters: 
+         file (file): file to uplaod
  
  Response:
            {
