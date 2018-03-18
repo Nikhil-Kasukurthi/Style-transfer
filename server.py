@@ -69,7 +69,8 @@ class UploadHandler(tornado.web.RequestHandler):
         image = (io.BytesIO(content))
         print(image)
         image_path = style_images_path + style_id + '.jpg'
-        if os.path.exists(image_path):
+        image_path_JPG = style_images_path + style_id + '.JPG'
+        if os.path.exists(image_path) or os.path.exists(image_path):
             result_image = evaluate(
                 image, 512, 
                 image_path, 
@@ -96,6 +97,7 @@ class DatasetHandler(tornado.web.RequestHandler):
             item['Title'] = row['Title']
             item['Database ID'] = row['Database ID']
             item['Link'] = row['Link']
+            item['Drive-Link'] = row['Drive-Link']
             dataset['images'].append(item)
         self.write(dataset)
 
