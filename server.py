@@ -70,7 +70,7 @@ class UploadHandler(tornado.web.RequestHandler):
         print(image)
         image_path = style_images_path + style_id + '.jpg'
         image_path_JPG = style_images_path + style_id + '.JPG'
-        if os.path.exists(image_path) or os.path.exists(image_path):
+        if os.path.exists(image_path) or os.path.exists(image_path_JPG):
             result_image = evaluate(
                 image, 512, 
                 image_path, 
