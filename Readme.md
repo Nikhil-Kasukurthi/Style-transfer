@@ -16,11 +16,15 @@ Here is an example.
 
 To run the server
 
-```python server.py```
+```
+python server.py
+```
 
 If you want to test the model run
 
-```python main.py eval --content-image images/content/shenyang.jpg --style-image images/museum_styles/43-15.jpg --model /21styles.model --content-size 1024```
+```
+python main.py eval --content-image images/content/shenyang.jpg --style-image images/museum_styles/43-15.jpg --model /21styles.model --content-size 1024
+```
 
 
 ## API Documentation
