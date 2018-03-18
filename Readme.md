@@ -9,9 +9,7 @@ When the user likes a particular painting, he/she can scan the name tag and try 
 
 Here is an example. 
 
-|Original Image | Style Image| Transfered Image
-|---|---|---|
-|![Shenyang](https://raw.githubusercontent.com/Nikhil-Kasukurthi/Style-transfer/master/images/content/shenyang3.jpg)|![Vasudeva carrying Krishna](https://github.com/Nikhil-Kasukurthi/Style-transfer/raw/master/images/museum_styles/66-14.JPG)|![Transfered Image](https://github.com/Nikhil-Kasukurthi/Style-transfer/raw/master/static/shenyang3.jpg)|
+![Image](https://github.com/Nikhil-Kasukurthi/Style-transfer/raw/master/Layer%201.png)
 
 
 ## Install Instructions
