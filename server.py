@@ -64,13 +64,10 @@ def evaluate(raw_content_image, raw_content_size, style_image, style_size, cuda,
 class UploadHandler(tornado.web.RequestHandler):
     @removeslash
     @coroutine
-    def set_default_headers(self):
-        self.request.headers['Content-Type'] == 'multipart/form-data'
-
-    @removeslash
-    @coroutine
     def post(self):
         file = self.request.files['file'][0]
+        self.request.headers['Content-Type'] = 'multipart/form-data'
+        self.request.connection.set_max_body_size(100000000000000000000) 
         style_id = self.get_argument('style_id')
         content = file['body']
         image = (io.BytesIO(content))
@@ -79,7 +76,7 @@ class UploadHandler(tornado.web.RequestHandler):
         image_path_JPG = style_images_path + style_id + '.JPG'
         if os.path.exists(image_path) or os.path.exists(image_path_JPG):
             result_image = evaluate(
-                image, 224, 
+                image, 512, 
                 image_path, 
                 224, cuda, 
                 os.path.join(static_file_path, file['filename']))
