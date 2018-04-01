@@ -24,7 +24,7 @@ from torchvision import datasets
 from torchvision import transforms
 
 import utils
-from net import Net, Vgg16
+from net import Net
 
 dataset_df = pd.read_csv('dataset.csv')
 static_file_path = 'static'
@@ -79,9 +79,9 @@ class UploadHandler(tornado.web.RequestHandler):
         image_path_JPG = style_images_path + style_id + '.JPG'
         if os.path.exists(image_path) or os.path.exists(image_path_JPG):
             result_image = evaluate(
-                image, 512, 
+                image, 224, 
                 image_path, 
-                512, cuda, 
+                224, cuda, 
                 os.path.join(static_file_path, file['filename']))
                 # 'file.jpg')
             response = {}
