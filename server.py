@@ -1,9 +1,9 @@
 # Tornado Libraries
 import tornado.ioloop
 import tornado.web
-import tornado.httpserver
 import tornado.ioloop
 import tornado.options
+from tornado.gen import engine, Task, coroutine
 
 from PIL import Image
 import io
@@ -61,7 +61,13 @@ def evaluate(raw_content_image, raw_content_size, style_image, style_size, cuda,
 
 
 class UploadHandler(tornado.web.RequestHandler):
+    @removeslash
+    @coroutine
+    def set_default_headers(self):
+    self.request.headers['Content-Type'] == 'multipart/form-data'
 
+    @removeslash
+    @coroutine
     def post(self):
         file = self.request.files['file'][0]
         style_id = self.get_argument('style_id')
