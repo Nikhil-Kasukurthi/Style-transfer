@@ -1,6 +1,7 @@
 # Tornado Libraries
 import tornado.ioloop
 import tornado.web
+from tornado.web import removeslash
 import tornado.ioloop
 import tornado.options
 from tornado.gen import engine, Task, coroutine
