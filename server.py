@@ -64,7 +64,7 @@ class UploadHandler(tornado.web.RequestHandler):
     @removeslash
     @coroutine
     def set_default_headers(self):
-    self.request.headers['Content-Type'] == 'multipart/form-data'
+        self.request.headers['Content-Type'] == 'multipart/form-data'
 
     @removeslash
     @coroutine
