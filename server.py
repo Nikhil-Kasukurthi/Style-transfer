@@ -24,6 +24,9 @@ from torchvision import transforms
 import utils
 from net import Net
 
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
 dataset_df = pd.read_csv('dataset.csv')
 static_file_path = 'static'
 
@@ -64,29 +67,30 @@ class UploadHandler(tornado.web.RequestHandler):
     @removeslash
     @coroutine
     def post(self):
-        start = time.clock()
+        start = time.time()
         file = self.request.files['file'][0]
         self.request.headers['Content-Type'] = 'multipart/form-data'
-        self.request.connection.set_max_body_size(100000000000000000000)
+        # self.request.connection.set_max_body_size(100000000000000000000)
         style_id = self.get_argument('style_id')
         content = file['body']
-        image = (io.BytesIO(content))
-        time1 = time.clock() - start
+        input_file = open("uploads/"
+                           + file['filename'], 'wb')
+        input_file.write(file['body'])
+
+        time1 = time.time() - start
         print('Image upload', time1)
-        print(image)
-        image_path = style_images_path + style_id + '.jpg'
-        image_path_JPG = style_images_path + style_id + '.JPG'
-        if os.path.exists(image_path) or os.path.exists(image_path_JPG):
+        style_image_path = style_images_path + style_id + '.jpg'
+        image = "uploads/"+ file['filename']
+        # image = Image.open("uploads/"+ file['filename']).convert('RGB')
+        if os.path.exists(style_image_path):
             result_image = evaluate(
                 image, 512,
-                image_path,
+                style_image_path,
                 224, cuda,
                 os.path.join(static_file_path, file['filename']))
-            # 'file.jpg')
             response = {}
             print('Response', time.clock() - time1)
             response['style_image'] = '/static/' + file['filename']
-            self.set_header("Content-type",  "image/png")
             self.write(response)
         else:
             self.write({'Response': 'Image not Found'})

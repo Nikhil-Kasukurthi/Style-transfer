@@ -14,7 +14,6 @@ import numpy as np
 import torch
 from PIL import Image
 from torch.autograd import Variable
-from torch.utils.serialization import load_lua
 
 def tensor_load_rgbimage(filename, size=None, scale=None, keep_asp=False):
     img = Image.open(filename).convert('RGB')
