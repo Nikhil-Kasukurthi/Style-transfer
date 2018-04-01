@@ -76,9 +76,9 @@ class UploadHandler(tornado.web.RequestHandler):
         input_file = open("uploads/"
                            + file['filename'], 'wb')
         input_file.write(file['body'])
-
-        time1 = time.time() - start
-        print('Image upload', time1)
+        input_file.close()
+        print('Image upload', time.time() - start)
+        start = time.time()
         style_image_path = style_images_path + style_id + '.jpg'
         image = "uploads/"+ file['filename']
         # image = Image.open("uploads/"+ file['filename']).convert('RGB')
@@ -89,7 +89,7 @@ class UploadHandler(tornado.web.RequestHandler):
                 224, cuda,
                 os.path.join(static_file_path, file['filename']))
             response = {}
-            print('Response', time.clock() - time1)
+            print('Response', time.time() - start)
             response['style_image'] = '/static/' + file['filename']
             self.write(response)
         else:
