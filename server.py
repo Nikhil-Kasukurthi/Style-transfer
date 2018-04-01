@@ -16,9 +16,7 @@ import numpy as np
 import pandas as pd
 
 import torch
-from torch.optim import Adam
 from torch.autograd import Variable
-from torch.utils.data import DataLoader
 
 from torchvision import datasets
 from torchvision import transforms
@@ -62,27 +60,32 @@ def evaluate(raw_content_image, raw_content_size, style_image, style_size, cuda,
 
 
 class UploadHandler(tornado.web.RequestHandler):
+
     @removeslash
     @coroutine
     def post(self):
+        start = time.clock()
         file = self.request.files['file'][0]
         self.request.headers['Content-Type'] = 'multipart/form-data'
-        self.request.connection.set_max_body_size(100000000000000000000) 
+        self.request.connection.set_max_body_size(100000000000000000000)
         style_id = self.get_argument('style_id')
         content = file['body']
         image = (io.BytesIO(content))
+        time1 = time.clock() - start
+        print('Image upload', time1)
         print(image)
         image_path = style_images_path + style_id + '.jpg'
         image_path_JPG = style_images_path + style_id + '.JPG'
         if os.path.exists(image_path) or os.path.exists(image_path_JPG):
             result_image = evaluate(
-                image, 512, 
-                image_path, 
-                224, cuda, 
+                image, 512,
+                image_path,
+                224, cuda,
                 os.path.join(static_file_path, file['filename']))
-                # 'file.jpg')
+            # 'file.jpg')
             response = {}
-            response['style_image'] = '/static/'+file['filename']
+            print('Response', time.clock() - time1)
+            response['style_image'] = '/static/' + file['filename']
             self.set_header("Content-type",  "image/png")
             self.write(response)
         else:
